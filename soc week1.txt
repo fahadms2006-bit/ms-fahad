@@ -1,0 +1,1053 @@
+Input Output
+class Solution {
+public:
+    void printNumber() {
+int n;
+cin>>n;
+cout<<n;
+    }
+};
+
+
+If ElseIf
+class Solution {
+public:
+    void studentGrade(int marks) {
+if(marks>=90) cout<<"Grade A";
+else if(marks>=70) cout<<"Grade B";
+else if(marks>=50) cout<<"Grade C";
+else if(marks>=30) cout<<"grade D";
+else {
+    cout<<"Fail";
+}
+    }
+};
+
+
+Switch Case
+class Solution {
+public:
+    void whichWeekDay(int day) {
+        switch(day){
+            case 1:
+                cout <<"Monday";
+                break;
+            case 2:
+                cout <<"Tuesday";
+                break;
+            case 3:
+                cout <<"Wednesday";
+                break;
+            case 4:
+                cout <<"Thursday";
+                break;
+            case 5:
+                cout <<"Friday";
+                break;
+            case 6:
+                cout <<"Saturday";
+                break;
+            case 7:
+                cout <<"Sunday";
+                break;
+            default:
+                cout <<"Invalid";
+        }
+    }
+};
+
+
+For Loop
+class Solution {
+public:
+    int forLoop(int low, int high) {
+        int sum=0;
+        for(int i=low;i<=high;i++){
+            sum=sum+i;
+        }
+        return sum;
+    }
+};
+
+
+While Loop
+class Solution {
+    public:
+    int whileLoop(int d) {
+        int j=50;
+        int sum=0;
+        while(j>0){
+            sum =sum+d;
+            d=d+10;
+            j--;
+
+        }
+        return sum;
+    }
+};
+
+
+Pass by Ref
+class Solution{
+public:
+    void reverse(vector<int>& arr){
+        for(int i=0;i<arr.size()/2;i++){
+            swap(arr[i],arr[arr.size()-i-1]);
+        }
+    }
+};
+
+
+now there is  22 pattern questions i gave the function name  accordingly
+void pattern1(int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+
+}
+void pattern2(int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+}
+void pattern3(int n){
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=i;j++){
+            cout<<j;
+        }
+        cout<<endl;
+    }
+}
+void pattern4(int n){
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=i;j++){
+            cout<<i;
+        }
+        cout<<endl;
+    }
+}
+void pattern5(int n){
+    for(int i=n;i>0;i--){
+        for(int j=0;j<i;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+}
+void pattern6(int n){
+    for(int i=n;i>0;i--){
+        for(int j=1;j<=i;j++){
+            cout<<j;
+        }
+        cout<<endl;
+    }
+}
+void pattern7(int n){
+    for(int i=1;i<=n;i++){
+        for( int j=0;j<(n-i);j++){
+            cout<<" "; 
+        }
+        for(int k=1;k<(2*i);k++){
+            cout<<"*";
+
+        }
+        cout<<endl;
+        
+    }
+}
+void pattern8(int n){
+    int p=0;
+        for(int i=n;i>0;i--){
+        for(int k=0;k<p;k++){
+            cout<<" ";
+        }
+        for( int j=1;j<2*i;j++){
+            cout<<"*"; 
+        }
+
+        cout<<endl;
+        p++;
+    }
+}
+void pattern9(int n){
+    for(int i=1;i<=n;i++){
+        for( int j=0;j<(n-i);j++){
+            cout<<" "; 
+        }
+        for(int k=1;k<(2*i);k++){
+            cout<<"*";
+
+        }
+        cout<<endl;
+        
+    }
+        for(int i=1;i<=n;i++){
+        for( int j=1;j<i;j++){
+            cout<<" "; 
+        }
+        for(int k=0;k<(2*(n-i)+1);k++){
+            cout<<"*";
+
+        }
+        cout<<endl;
+        
+    }
+}
+void pattern10(int n){
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<i;j++){
+            cout<<"*";
+
+        }
+        cout<<endl;
+    }
+    for(int i=1;i<n;i++){
+        for(int j=0;j<(n-i);j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+}
+void pattern11(int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            if(((i+j)%2)==1){
+                cout<<"0";
+            }
+            else{
+                cout<<"1";
+            }
+        }
+        cout<<endl;
+    }
+}
+void pattern12(int n){
+    for (int i=1;i<=n;i++){
+        for(int j=1;j<=2*n;j++){
+            if(j<=n){
+            if(j<=i){
+            cout<<j;
+            }
+            else{
+                cout<<" ";
+            }
+        
+
+        }
+        else{
+            if(j<=(2*n)-i){
+                cout<<" ";
+            }
+            else{
+                cout<<(2*n)-j+1;
+            }
+        }
+    }
+            cout<<endl;
+}
+}
+void pattern13(int n){
+    int p=1;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            cout<<p<<" ";
+            p++;
+        }
+        cout<<endl;
+    }
+}
+void pattern14(int n){
+    for (int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            cout<<char('A'+j)<<" ";
+
+        }
+        cout<<endl;
+    }
+}
+void pattern15(int n){
+    for (int i=n;i>0;i--){
+        for(int j=0;j<i;j++){
+            cout<<char('A'+j)<<" ";
+
+        }
+        cout<<endl;
+    }
+}
+void pattern16(int n){
+    for (int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            cout<<char('A'+i)<<" ";
+
+        }
+        cout<<endl;
+    }
+}
+void pattern17(int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n-i-1;j++){
+            cout<<" ";
+        }
+        char a='A';
+        for(int j=1;j<=2*i+1;j++){
+            if(j<=i){
+            cout<<char(a+j-1);
+        }
+        else{
+            cout<<char(a+(2*i-j+1));
+                }
+        }
+        cout<<endl;
+    }
+}
+void pattern18(int n){
+    for (int i = 1; i <= n; i++) {
+    char ch = 'A' + (n - i);
+    for (int j = 1; j <= i; j++) {
+         cout << ch << " ";
+         ch++;
+        }
+        cout << endl;
+    }
+}
+void pattern19(int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n-i;j++){
+            cout<<"*";
+
+        }
+        for(int j=0;j<2*i;j++){
+            cout<<" ";
+        }
+        for(int j=0;j<n-i;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+        for(int i=0;i<n;i++){
+        for(int j=0;j<=i;j++){
+            cout<<"*";
+
+        }
+        for(int j=0;j<2*(n-i-1);j++){
+            cout<<" ";
+        }
+        for(int j=0;j<=i;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+}
+void pattern20(int n){
+    for(int i=0;i<2*n-1;i++){
+        if(i<n){
+        for(int j=0;j<=i;j++){
+            cout<<"*";
+        }
+        for(int j=0;j<2*(n-i-1);j++){
+            cout<<" ";
+        }
+        for(int j=0;j<=i;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+    else{
+        for(int j=0;j<2*n-i-1;j++){
+            cout<<"*";
+        }
+        for(int j=0;j<2*(i-n+1);j++){
+            cout<<" ";
+        }
+        for(int j=0;j<2*n-i-1;j++){
+            cout<<"*";
+        }
+        cout<<endl;
+    }
+    }
+}
+void pattern21(int n) {
+    for (int i = 1; i <= n; i++) {
+           for (int j = 1; j <= n; j++) {
+                if (i == 1 || i == n || j == 1 || j == n)
+                cout << "*";
+                  else
+                cout << " ";
+                }
+            cout << endl;
+        }
+}
+void pattern22(int n) {
+    int size = 2*n-1;
+    for (int i =0;i<size;i++) {
+        for (int j=0;j<size;j++) {
+            int top =i;
+            int left =j;
+            int bottom =size-1-i;
+            int right =size-1-j;
+            int layer =min(min(top,bottom),min(left, right));
+            cout << n - layer << " ";
+            }
+       cout << endl;
+    }
+}
+
+
+Count all Digits of a Number
+class Solution {
+public:
+    int countDigit(int n) {
+        if (n ==0) return 1;
+        int count=0;
+        while (n>0) {
+            count++;
+            n =n/10;
+        }
+        return count;
+    }
+};
+
+
+Reverse a number
+class Solution {
+public:
+    int reverseNumber(int n) {
+    int p=n;
+    int k=0;
+    while(p>0){
+        int z=p%10;
+        if(z!=0){
+            k=k*10+z;
+        }
+        else if(z==0 && k!=0){
+            k=k*10;
+        }
+        p=p/10;
+
+    }
+    return k;
+    }
+};
+
+
+Palindrome Number
+class Solution {
+public:
+    bool isPalindrome(int n) {
+        int original =n;
+        int reverse =0;
+        while (n>0) {
+            int digit = n%10;
+            reverse = reverse*10+digit;
+            n =n/10;
+        }
+        return original == reverse;
+    }
+};
+
+
+GCD of Two Numbers
+class Solution {
+public:
+    int GCD(int n1,int n2) {
+        while (n2 != 0) {
+            int rem = n1 % n2;
+            n1 = n2;
+            n2 = rem;
+        }
+        return n1;
+    }
+};
+
+
+Check if the Number is Armstrong
+class Solution {
+public:
+    bool isArmstrong(int n) {
+        int original =n;
+        int sum =0;
+        int digits =0;
+        int temp =n;
+        while (temp>0) {
+            digits++;
+            temp =temp/10;
+        }
+        temp = n;
+        while (temp>0) {
+            int digit=temp%10;
+            sum +=pow(digit,digits);
+            temp /=10;
+        }
+        return sum == original;
+    }
+};
+
+
+Divisors of a Number
+class Solution {
+public:
+    vector<int> divisors(int n) {
+        vector<int> ans;
+        for (int i=1;i*i<=n;i++) {
+            if (n % i ==0) {
+                ans.push_back(i);
+                if (i != n / i)
+                    ans.push_back(n / i);
+            }
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
+
+
+Print 1 to N using Recursion
+class Solution {
+  public:
+    void printNumbers(int n) {
+        if(n==0)return;
+        printNumbers(n-1);
+        cout<<n<<endl;
+
+    }
+};
+
+
+Print N to 1 using Recursion
+class Solution {
+  public:
+    void printNumbers(int n) {
+        if(n==0)return;
+        cout<<n<<endl;
+        printNumbers(n-1);
+    }
+};
+
+
+Sum of First N Numbers
+class Solution{	
+	public:
+		int NnumbersSum(int N){
+            if(N==0){
+                return 0;
+            }
+            return N + NnumbersSum(N-1);
+		}
+};
+
+
+Factorial of a given number
+class Solution {
+public:
+    int factorial(int n) {
+        if(n==0){
+            return 1;
+        }
+        return n*factorial(n-1);
+
+    }
+};
+
+
+Reverse an array
+class Solution{
+public:
+    void reverse(int arr[], int n){
+        int p=0;
+        while(p<n/2){
+            swap(arr[p],arr[n-p-1]);
+            p++;
+        }
+    }
+};
+
+
+Check if String is Palindrome or Not
+class Solution{	
+	public:		
+		bool palindromeCheck(string& s){
+            int n=s.length();
+            for(int i=0;i<n/2;i++){
+                if(s[i]!==s[n-i-1]) return false;
+
+            }
+            return true;
+		}
+};
+
+
+Fibonacci Number
+class Solution {
+public:
+    int fib(int n) {
+        if(n==0) return 0;
+        if(n==1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+};
+
+
+Counting Frequencies of Array Elements
+eclass Solution {
+public:
+    vector<vector<int>> countFrequencies(vector<int>& nums) {
+        unordered_map<int, int> freq;
+        for (int x : nums) {
+            freq[x]++;
+        }
+        vector<vector<int>> ans;
+        for (auto it : freq) {
+            ans.push_back({it.first, it.second});
+        }
+        return ans;
+    }
+};
+
+
+Highest Occurring Element in an Array
+class Solution {
+public:
+    int mostFrequentElement(vector<int>& nums) {
+        unordered_map<int, int> freq;
+        for (int x : nums) {
+            freq[x]++;
+        }
+        int ans = INT_MAX;
+        int maxFreq = 0;
+        for (auto it : freq) {
+            int num = it.first;
+            int count = it.second;
+            if (count > maxFreq) {
+                maxFreq = count;
+                ans = num;
+            }
+            else if (count == maxFreq) {
+                ans = min(ans, num);
+            }
+        }
+        return ans;
+
+    }
+};
+
+
+Selection Sort
+class Solution {
+public:
+    vector<int> selectionSort(vector<int>& nums) {
+        int n=nums.size();
+            for(int i=0;i<n-1;i++){
+            int min=nums[i];
+                int k=i;
+        for(int j=i;j<n;j++){
+            if(nums[j]<min){
+                min=nums[j];
+                k=j;
+
+            }
+
+        }
+        if(k!=i){
+           swap(nums[i],nums[k]);
+        }
+    }
+return nums;
+    }
+};
+
+
+Bubble Sort
+class Solution {
+public:
+    vector<int> bubbleSort(vector<int>& nums) {
+    int n = v.size();
+    for (int i =0;i<n-1;i++) {
+        bool c =false;
+        for (int j=0;j<n-i-1;j++) {
+            if (v[j]>v[j+1]) {
+                swap(v[j],v[j+1]);
+                c =true;
+            }
+        }
+        if (c == false) {
+            break;
+        }
+    }
+    }
+};
+
+
+Insertion Sorting
+class Solution {
+public:
+    vector<int> insertionSort(vector<int>& nums) {
+        int n =nums.size();
+        for (int i=1;i<n;i++) {
+            int key =nums[i];
+            int j =i-1;
+            while (j>=0 && nums[j]>key) {
+                nums[j + 1]=nums[j];
+                j--;
+            }
+            nums[j + 1] = key;
+        }
+        return nums;
+    }
+};
+
+
+Merge Sorting
+class Solution {
+public:
+    void merge(vector<int>& nums, int low, int mid, int high) {
+        vector<int>temp;
+        int left =low;
+        int right =mid+1;
+        while (left<=mid && right<=high) {
+            if (nums[left]<=nums[right]) {
+                temp.push_back(nums[left++]);
+            } else {
+                temp.push_back(nums[right++]);
+            }
+        }
+        while (left<=mid) {
+            temp.push_back(nums[left++]);
+        }
+        while (right<=high) {
+            temp.push_back(nums[right++]);
+        }
+        for (int i=low;i<=high;i++) {
+            nums[i]=temp[i-low];
+        }
+    }
+    void sort(vector<int>& nums,int low,int high) {
+        if (low>=high)
+            return;
+        int mid = (low+high) / 2;
+        sort(nums,low,mid);
+        sort(nums,mid+1,high);
+        merge(nums,low,mid,high);
+    }
+    vector<int> mergeSort(vector<int>& nums) {
+        sort(nums,0,nums.size()-1);
+        return nums;
+    }
+};
+
+
+Recursive Bubble Sort
+class Solution {
+public:
+    void solve(vector<int>& nums, int n) {
+        if (n==1) return;
+        for (int i=0;i<n-1;i++) {
+            if (nums[i]>nums[i+1]) {
+                swap(nums[i],nums[i+1]);
+            }
+        }
+        solve(nums,n-1);
+    }
+    vector<int> bubbleSort(vector<int>& nums) {
+        solve(nums, nums.size());
+        return nums;
+    }
+};
+
+
+Recursive Insertion Sort
+class Solution {
+public:
+    void insert(vector<int>& nums, int j, int key) {
+        if (j<0 || nums[j]<=key) {
+            nums[j+1]=key;
+            return;
+        }
+        nums[j+1] = nums[j];
+        insert(nums,j-1,key);
+    }
+    void sortRec(vector<int>& nums, int n) {
+        if (n<=1) return;
+        sortRec(nums,n-1);
+        int key=nums[n-1];
+        insert(nums, n-2, key);
+    }
+    vector<int> insertionSort(vector<int>& nums) {
+        sortRec(nums, nums.size());
+        return nums;
+    }
+};
+
+
+Quick Sorting
+class Solution {
+public:
+    int partition(vector<int>& nums, int low, int high) {
+        int pivot = nums[high];
+        int i = low-1;
+        for (int j=low;j<high;j++) {
+            if (nums[j]<pivot) {
+                i++;
+                swap(nums[i],nums[j]);
+            }
+        }
+        swap(nums[i+1],nums[high]);
+        return i+1;
+    }
+    void quick(vector<int>& nums, int low, int high) {
+        if (low<high) {
+            int p =partition(nums, low, high);
+            quick(nums, low, p-1);
+            quick(nums, p+1, high);
+        }
+    }
+    vector<int> quickSort(vector<int>& nums) {
+        quick(nums, 0,nums.size()-1);
+        return nums;
+    }
+};
+
+
+Largest Element
+class Solution {
+public:
+    int largestElement(vector<int>& nums) {
+        int max = nums[0];
+        for (int i = 1; i<nums.size();i++) {
+            if (nums[i]>max) {
+                max=nums[i];
+            }
+        }
+        return max;
+    }
+};
+
+
+Second Largest Element
+class Solution {
+public:
+    int secondLargestElement(vector<int>& nums) {
+        int largest =nums[0];
+        int secondLargest =-1;
+        for (int i = 1;i<nums.size();i++) {
+            if (nums[i]>largest) {
+                secondLargest=largest;
+                largest=nums[i];
+            }
+            else if (nums[i]<largest && nums[i] > secondLargest) {
+                secondLargest=nums[i];
+            }
+        }
+        return secondLargest;
+    }
+};
+
+
+Check if the Array is Sorted II
+class Solution{	
+	public:
+		bool isSorted(vector<int>& nums){
+        for (int i=1; i<nums.size();i++) {
+            if (nums[i]<nums[i-1]) {
+                return false;
+            }
+        }
+        return true;
+		}
+};
+
+
+Remove duplicates from sorted array
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int k=1;
+        for (int i=1;i<nums.size();i++) {
+            if (nums[i] != nums[k-1]) {
+                nums[k]=nums[i];
+                k++;
+            }
+        }
+        return k;
+    }
+};
+
+
+Left Rotate Array by One
+class Solution {
+public:
+    void rotateArrayByOne(vector<int>& nums) {
+        int first=nums[0];
+        for (int i=1;i<nums.size();i++) {
+            nums[i-1]=nums[i];
+        }
+        nums[nums.size()-1]=first;
+    }
+};
+
+
+Left Rotate Array by K Places
+class Solution {
+public:
+    void rotateArray(vector<int>& nums, int k) {
+        int n=nums.size();
+        k%=n;
+        vector<int> temp;
+        for (int i=k;i<n;i++)
+            temp.push_back(nums[i]);
+        for (int i=0;i<k;i++)
+            temp.push_back(nums[i]);
+        nums = temp;
+    }
+};
+
+
+Move Zeros to End
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int j=0;
+        for (int i=0;i<nums.size();i++) {
+            if (nums[i] != 0) {
+                swap(nums[i], nums[j]);
+                j++;
+            }
+        }       
+    }
+};
+
+
+Linear Search
+class Solution {
+public:
+    int linearSearch(vector<int>& nums, int target) {
+        for (int i=0;i<nums.size();i++) {
+            if (nums[i]==target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+
+
+Union of two sorted arrays
+class Solution {
+public:
+    vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> ans;
+        int i = 0, j = 0;
+        while (i<nums1.size() && j<nums2.size()) {
+            if (nums1[i]<nums2[j]) {
+                if (ans.empty() || ans.back() != nums1[i])
+                    ans.push_back(nums1[i]);
+                i++;
+            }
+            else if (nums1[i]>nums2[j]) {
+                if (ans.empty() || ans.back() != nums2[j])
+                    ans.push_back(nums2[j]);
+                j++;
+            }
+            else {
+                if (ans.empty() || ans.back() != nums1[i])
+                    ans.push_back(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+        while (i < nums1.size()) {
+            if (ans.empty() || ans.back() != nums1[i])
+                ans.push_back(nums1[i]);
+            i++;
+        }
+        while (j < nums2.size()) {
+            if (ans.empty() || ans.back() != nums2[j])
+                ans.push_back(nums2[j]);
+            j++;
+        }
+        return ans;       
+    }
+};
+
+
+Find missing number
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n=nums.size();
+        int expected=n*(n+1)/2;
+        int actual = 0;
+        for (int i=0;i<n;i++) {
+            actual += nums[i];
+        }
+        return expected - actual;      
+    }
+};
+
+
+Maximum Consecutive Ones
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int count =0;
+        int maxCount =0;
+        for (int i=0;i<nums.size();i++) {
+            if (nums[i] == 1) {
+                count++;
+                if (count > maxCount) {
+                    maxCount=count;
+                }
+            } else {
+                count = 0;
+            }
+        }
+        return maxCount;        
+    }
+};
+
+
+Single Number - I
+class Solution{    
+public:    
+    int singleNumber(vector<int>& nums){
+        for (int i = 0; i < nums.size(); i++) {
+            int count = 0;
+            for (int j=0; j<nums.size();j++) {
+                if (nums[i] == nums[j]) {
+                    count++;
+                }
+            }
+            if (count==1) {
+                return nums[i];
+            }
+        }
+        return -1;
+    }
+};
+
+
+Longest subarray with sum K
+class Solution{
+public:
+    int longestSubarray(vector<int> &nums, int k){
+        int maxLen = 0;
+        for (int i=0;i<nums.size();i++) {
+            int sum =0;
+            for (int j=i;j<nums.size();j++) {
+                sum += nums[j];
+                if (sum==k) {
+                    int len =j-i+1;
+                    if (len > maxLen) {
+                        maxLen=len;
+                    }
+                }
+            }
+        }
+        return maxLen;       
+    }
+};

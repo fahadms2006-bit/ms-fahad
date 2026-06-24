@@ -1,0 +1,1204 @@
+Two Sum
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> ans(2);
+        for(int i=0;i<nums.size();i++){
+            for(int j=i+1;j<nums.size();j++){
+                if(nums [i]+nums[j]==target){
+                    ans[0]=i;
+                    ans[1]=j;
+                    return ans;
+                }
+            }
+        }
+        return {};
+    }
+};
+
+
+Sort an array of 0's 1's and 2's
+class Solution {
+public:
+    void sortZeroOneTwo(vector<int>& nums) {
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n-1-i;j++){
+                if(nums[j]>=nums[j+1]){
+                    swap(nums[j],nums[j+1]);
+                }
+
+            }
+        }
+    }
+};
+
+
+Majority Element-I
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n=nums.size();
+        map<int,int>mp;
+        for(int i=0;i<n;i++){
+            mp[nums[i]]++;
+        }
+    int maxElement = 0;
+    for(pair<int, int> p : mp) {
+        if(p.second>n/2) {
+            maxElement = p.first;
+                return maxElement;
+    }
+    }
+
+    }
+};
+
+
+Kadane's Algorithm
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        int currentsum=0;
+        int previoussum=nums[0];
+        for(int i=0;i<n;i++){
+            currentsum+=nums[i];
+            if(currentsum>previoussum){
+                previoussum=currentsum;
+            }
+            if(currentsum<0){
+                currentsum=0;
+            }
+        }
+        return previoussum;
+    }
+};
+
+
+Best time to buy and sell stock
+class Solution{
+public:
+    int stockBuySell(vector<int> arr, int n){
+        int minPrice =arr[0];
+        int maxProfit =0;
+        for(int i =1;i<n;i++){
+            int profit=arr[i]-minPrice;
+            if(profit > maxProfit){
+                maxProfit=profit;
+            }
+            if(arr[i]<minPrice){
+                minPrice=arr[i];
+            }
+        }
+        return maxProfit;
+    }
+};
+
+
+Rearrange array elements by sign
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+            int n=nums.size();
+    vector<int>ans(n);
+    int even=0,odd=1;
+    for(int i=0;i<n;i++){
+        if(nums[i]>0){
+            ans[even]=nums[i];
+            even+=2;
+        }
+        else{
+            ans[odd]=nums[i];
+            odd+=2;
+        }
+    }
+    return ans;
+    }
+};
+
+
+Next Permutation
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int i = n - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = n - 1;
+            while (nums[j] <= nums[i]) {
+                j--;
+            }
+            swap(nums[i], nums[j]);
+        }
+        int left = i + 1;
+        int right = n - 1;
+        while (left < right) {
+            swap(nums[left], nums[right]);
+            left++;
+            right--;
+        }
+    }
+};
+
+
+Leaders in an Array
+class Solution {
+public:
+    vector<int> leaders(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>ans;
+        int maxi =nums[n-1];
+        ans.push_back(maxi);
+        for (int i = n-2;i>=0;i--) {
+            if (nums[i]>maxi) {
+                ans.push_back(nums[i]);
+                maxi = nums[i];
+            }
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+
+Longest Consecutive Sequence in an Array
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> st(nums.begin(), nums.end());
+        int longest=0;
+        for (int num : st) {
+            if (st.find(num-1)==st.end()) {
+                int curr=num;
+                int len=1;
+                while (st.find(curr + 1)!=st.end()) {
+                    curr++;
+                    len++;
+                }
+                longest = max(longest, len);
+            }
+        }
+        return longest;        
+    }
+};
+
+
+Set Matrix Zeroes
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        vector<int>rows(m, 0);
+        vector<int>cols(n, 0);
+        for (int i=0;i<m;i++) {
+            for (int j=0;j<n;j++) {
+                if (matrix[i][j] == 0) {
+                    rows[i]=1;
+                    cols[j]=1;
+                }
+            }
+        }
+        for (int i=0;i<m;i++) {
+            for (int j=0;j<n;j++) {
+                if (rows[i]==1 || cols[j]==1) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+};
+
+
+Rotate matrix by 90 degrees
+class Solution {
+public:
+    void rotateMatrix(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        for (int i=0;i<n;i++) {
+            for (int j=i+1;j<n;j++) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+        for (int i=0;i<n;i++) {
+            reverse(matrix[i].begin(), matrix[i].end());
+        }        
+    }
+};
+
+
+Print the matrix in spiral manner
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        int top=0;
+        int bottom=matrix.size()-1;
+        int left =0;
+        int right =matrix[0].size()-1;
+        while (top <= bottom && left <= right) {
+            for (int j=left;j<=right;j++) {
+                ans.push_back(matrix[top][j]);
+            }
+            top++;
+            for (int i=top;i<=bottom;i++) {
+                ans.push_back(matrix[i][right]);
+            }
+            right--;
+            if (top <= bottom) {
+                for (int j=right;j>=left;j--) {
+                    ans.push_back(matrix[bottom][j]);
+                }
+                bottom--;
+            }
+            if (left <= right) {
+                for (int i=bottom;i>=top;i--) {
+                    ans.push_back(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+        return ans;
+    }
+};
+
+
+Count subarrays with given sum
+class Solution{
+public:
+    int subarraySum(vector<int> &nums, int k){
+        int n=nums.size();
+        int count = 0;
+        for (int i=0;i<n;i++) {
+            int sum = 0;
+            for (int j=i;j<n;j++) {
+                sum += nums[j];
+                if (sum==k) {
+                    count++;
+                }
+            }
+        }
+        return count;        
+    }
+};
+
+
+Pascal's Triangle I
+class Solution {
+public:
+    int pascalTriangleI(int r, int c) {
+        long long res=1;
+        int n =r-1;
+        int k =c-1;
+        for (int i=0;i<k;i++) {
+            res = res*(n - i);
+            res = res/(i + 1);
+        }
+        return res;
+    }
+};
+
+
+Majority Element-II
+class Solution {
+public:
+    vector<int> majorityElementTwo(vector<int>& nums) {
+        int cnt1=0,cnt2=0;
+        int ele1=0,ele2=0;
+        for (int num : nums) {
+            if (cnt1>0 && num==ele1) {
+                cnt1++;
+            }
+            else if (cnt2>0 && num==ele2) {
+                cnt2++;
+            }
+            else if (cnt1==0) {
+                ele1=num;
+                cnt1=1;
+            }
+            else if (cnt2==0) {
+                ele2=num;
+                cnt2=1;
+            }
+            else {
+                cnt1--;
+                cnt2--;
+            }
+        }
+        cnt1 =0;
+        cnt2 =0;
+        for (int num : nums) {
+            if (num == ele1) cnt1++;
+            else if (num == ele2) cnt2++;
+        }
+        vector<int> ans;
+        int limit =nums.size()/3;
+        if (cnt1 > limit) ans.push_back(ele1);
+        if (cnt2 > limit) ans.push_back(ele2);
+        return ans;        
+    }
+};
+
+
+3 Sum
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ans;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                if (sum < 0) {
+                    j++;
+                }
+                else if (sum > 0) {
+                    k--;
+                }
+                else {
+                    ans.push_back({nums[i], nums[j], nums[k]});
+                    j++;
+                    k--;
+                    while (j < k && nums[j] == nums[j - 1]) {
+                        j++;
+                    }
+                    while (j < k && nums[k] == nums[k + 1]) {
+                        k--;
+                    }
+                }
+            }
+        }
+        return ans;        
+    }
+};
+
+
+4 Sum
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> ans;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < n; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = n - 1;
+                while (left < right) {
+                    long long sum = (long long)nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum < target) {
+                        left++;
+                    }
+                    else if (sum > target) {
+                        right--;
+                    }
+                    else {
+                        ans.push_back({nums[i], nums[j], nums[left], nums[right]});
+                        left++;
+                        right--;
+                        while (left < right && nums[left] == nums[left - 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right + 1]) {
+                            right--;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;        
+    }
+};
+
+
+Largest Subarray with Sum 0
+class Solution {
+  public:
+    int maxLen(vector<int>& arr) {
+    map<long long, int> mp;
+        long long sum = 0;
+        int maxi = 0;
+        for (int i = 0; i < arr.size(); i++) {
+            sum += arr[i];
+            if (sum == 0) {
+                maxi = i + 1;
+            }
+            if (mp.find(sum) != mp.end()) {
+                maxi = max(maxi, i - mp[sum]);
+            } else {
+                mp[sum] = i;
+            }
+        }
+        return maxi;
+    }
+};
+
+
+Count subarrays with given xor K
+class Solution{
+public:
+    int subarraysWithXorK(vector<int> &nums, int k) {
+        unordered_map<int, int> mp;
+        int xr = 0;
+        int count = 0;
+        mp[0] = 1;
+        for (int i = 0; i < nums.size(); i++) {
+            xr ^= nums[i];
+            int x = xr ^ k;
+            if (mp.find(x) != mp.end()) {
+                count += mp[x];
+            }
+            mp[xr]++;
+        }
+        return count;        
+    }
+};
+
+
+Merge Overlapping Subintervals
+class Solution {
+  public:
+    vector<vector<int>> mergeOverlap(vector<vector<int>>& arr) {
+        vector<vector<int>> ans;
+        sort(arr.begin(), arr.end());
+        for (int i = 0; i < arr.size(); i++) {
+            if (ans.empty() || arr[i][0] > ans.back()[1]) {
+                ans.push_back(arr[i]);
+            } else {
+                ans.back()[1] = max(ans.back()[1], arr[i][1]);
+            }
+        }
+        return ans;
+    }
+};
+
+
+Merge two sorted arrays without extra space
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m - 1;
+        int j = n - 1;
+        int k = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[k] = nums1[i];
+                i--;
+            } else {
+                nums1[k] = nums2[j];
+                j--;
+            }
+            k--;
+        }
+        while (j >= 0) {
+            nums1[k] = nums2[j];
+            j--;
+            k--;
+        }        
+    }
+};
+
+
+Find the repeating and missing number
+class Solution {
+public:
+    vector<int> findMissingRepeatingNumbers(vector<int> nums) {
+        long long n = nums.size();
+        long long SN = (n * (n + 1)) / 2;
+        long long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+        long long S = 0;
+        long long S2 = 0;
+        for (int i = 0; i < n; i++) {
+            S += nums[i];
+            S2 += 1LL * nums[i] * nums[i];
+        }
+        long long val1 = S - SN;          
+        long long val2 = S2 - S2N;        
+        val2 = val2 / val1;               
+        long long x = (val1 + val2) / 2;  
+        long long y = x - val1;           
+        return {(int)x, (int)y};
+    }
+};
+
+
+Count Inversions
+class Solution {
+public:
+    long long merge(vector<int>& arr, int low, int mid, int high) {
+        vector<int> temp;
+        int left = low;
+        int right = mid + 1;
+        long long invCount = 0;
+        while (left <= mid && right <= high) {
+            if (arr[left]<=arr[right]) {
+                temp.push_back(arr[left]);
+                left++;
+            }
+            else {
+                temp.push_back(arr[right]);
+                invCount += (mid - left + 1);
+                right++;
+            }
+        }
+        while (left<=mid) {
+            temp.push_back(arr[left]);
+            left++;
+        }
+        while (right<=high) {
+            temp.push_back(arr[right]);
+            right++;
+        }
+        for (int i =low;i<=high;i++) {
+            arr[i] = temp[i-low];
+        }
+        return invCount;
+    }
+    long long mergeSort(vector<int>& arr, int low, int high) {
+        if (low >= high) return 0;
+        int mid = (low+high)/2;
+        long long count=0;
+        count += mergeSort(arr, low, mid);
+        count += mergeSort(arr, mid + 1, high);
+        count += merge(arr, low, mid, high);
+        return count;
+    }
+    long long int numberOfInversions(vector<int> nums) {
+        int n=nums.size();
+        return mergeSort(nums,0,n-1);
+    }
+};
+
+
+Reverse Pairs
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        int n=nums.size();
+        int count=0;
+        for (int i=0;i<n;i++) {
+            for (int j =i+1;j<n;j++) {
+                if ((long long)nums[i] > 2LL * nums[j]) {
+                    count++;
+                }
+            }
+        }
+        return count;        
+    }
+};
+
+
+Maximum Product Subarray in an Array
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n=nums.size();
+        int maxProduct=nums[0];
+        for (int i=0;i<n;i++) {
+            long long product=1;
+            for (int j=i;j<n;j++) {
+                product*=nums[j];
+                maxProduct=max(maxProduct, (int)product);
+            }
+        }
+        return maxProduct;        
+    }
+};
+
+
+Search X in sorted array
+class Solution {
+public:
+    int search(vector<int> &nums, int target) {
+        int low = 0;
+        int high = nums.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+            else if (nums[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return -1;
+    }
+};
+
+Lower Bound
+class Solution {
+public:
+    int lowerBound(vector<int> &nums, int x) {
+        int low = 0, high = nums.size() - 1;
+        int ans = nums.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] >= x) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+Upper Bound
+
+class Solution {
+public:
+    int upperBound(vector<int> &nums, int x) {
+        int low = 0, high = nums.size() - 1;
+        int ans = nums.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] > x) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+Search Insert Position
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        int ans = nums.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] >= target) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+Floor and Ceil in Sorted Array
+class Solution {
+public:
+    vector<int> getFloorAndCeil(vector<int> nums, int x) {
+        int floor = -1, ceil = -1;
+
+        int low = 0, high = nums.size() - 1;
+
+        
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] <= x) {
+                floor = nums[mid];
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        low = 0;
+        high = nums.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] >= x) {
+                ceil = nums[mid];
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return {floor, ceil};
+    }
+};
+
+First and last occurrence
+
+class Solution {
+public:
+    int firstPos(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        int ans = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == target) {
+                ans = mid;
+                high = mid - 1; // search left
+            }
+            else if (nums[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return ans;
+    }
+
+    int lastPos(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        int ans = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == target) {
+                ans = mid;
+                low = mid + 1; // search right
+            }
+            else if (nums[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return ans;
+    }
+
+    vector<int> searchRange(vector<int>& nums, int target) {
+        return {firstPos(nums, target), lastPos(nums, target)};
+    }
+};
+
+Count Occurrences in a Sorted Array
+
+class Solution {
+public:
+    int firstPos(vector<int>& arr, int target) {
+        int low = 0, high = arr.size() - 1, ans = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == target) {
+                ans = mid;
+                high = mid - 1;
+            }
+            else if (arr[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return ans;
+    }
+
+    int lastPos(vector<int>& arr, int target) {
+        int low = 0, high = arr.size() - 1, ans = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == target) {
+                ans = mid;
+                low = mid + 1;
+            }
+            else if (arr[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return ans;
+    }
+
+    int countOccurrences(vector<int>& arr, int target) {
+        int first = firstPos(arr, target);
+
+        if (first == -1) return 0;
+
+        int last = lastPos(arr, target);
+
+        return last - first + 1;
+    }
+};
+
+Search in rotated sorted array-I
+class Solution {
+public:
+    int search(vector<int>& nums, int k) {
+        int low = 0, high = nums.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == k)
+                return mid;
+
+            if (nums[low] <= nums[mid]) {
+                if (nums[low] <= k && k < nums[mid])
+                    high = mid - 1;
+                else
+                    low = mid + 1;
+            }
+            else {
+                if (nums[mid] < k && k <= nums[high])
+                    low = mid + 1;
+                else
+                    high = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+};
+
+Search in rotated sorted array-II
+
+class Solution {
+public:
+    bool searchInARotatedSortedArrayII(vector<int>& nums, int k) {
+        int low = 0, high = nums.size() - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] == k)
+                return true;
+
+            if (nums[low] == nums[mid] && nums[mid] == nums[high]) {
+                low++;
+                high--;
+                continue;
+            }
+
+            if (nums[low] <= nums[mid]) { // left sorted
+                if (nums[low] <= k && k < nums[mid])
+                    high = mid - 1;
+                else
+                    low = mid + 1;
+            } else { // right sorted
+                if (nums[mid] < k && k <= nums[high])
+                    low = mid + 1;
+                else
+                    high = mid - 1;
+            }
+        }
+
+        return false;
+    }
+};
+
+Find minimum in Rotated Sorted Array
+
+class Solution {
+public:
+    int findMin(vector<int>& arr) {
+        int low = 0, high = arr.size() - 1;
+        int ans = INT_MAX;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            
+            if (arr[low] <= arr[mid]) {
+                ans = min(ans, arr[low]);
+                low = mid + 1;
+            }
+            else {
+                ans = min(ans, arr[mid]);
+                high = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+Find out how many times the array is rotated
+
+class Solution {
+public:
+    int findKRotation(vector<int>& nums) {
+        int low = 0, high = nums.size() - 1;
+        int ans = INT_MAX;
+        int index = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[low] <= nums[mid]) {
+                if (nums[low] < ans) {
+                    ans = nums[low];
+                    index = low;
+                }
+                low = mid + 1;
+            } else {
+                if (nums[mid] < ans) {
+                    ans = nums[mid];
+                    index = mid;
+                }
+                high = mid - 1;
+            }
+        }
+
+        return index;
+    }
+};
+
+Single element in sorted array
+
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int n = nums.size();
+
+        if (n == 1) return nums[0];
+        if (nums[0] != nums[1]) return nums[0];
+        if (nums[n - 1] != nums[n - 2]) return nums[n - 1];
+
+        int low = 1, high = n - 2;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (nums[mid] != nums[mid - 1] && nums[mid] != nums[mid + 1])
+                return nums[mid];
+
+            if ((mid % 2 == 1 && nums[mid] == nums[mid - 1]) ||
+                (mid % 2 == 0 && nums[mid] == nums[mid + 1]))
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return -1;
+    }
+};
+
+Find peak element
+
+class Solution {
+public:
+    int findPeakElement(vector<int>& arr) {
+        int n = arr.size();
+
+        if (n == 1) return 0;
+        if (arr[0] > arr[1]) return 0;
+        if (arr[n - 1] > arr[n - 2]) return n - 1;
+
+        int low = 1, high = n - 2;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] > arr[mid - 1] && arr[mid] > arr[mid + 1])
+                return mid;
+
+            if (arr[mid] > arr[mid - 1])
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return -1;
+    }
+};
+
+Find row with maximum 1's
+class Solution {
+public:
+    int rowWithMax1s(vector<vector<int>> &mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+
+        int maxOnes = 0;
+        int ans = -1;
+
+        for (int i = 0; i < n; i++) {
+            int low = 0, high = m - 1;
+            int firstOne = m;
+
+            while (low <= high) {
+                int mid = low + (high - low) / 2;
+
+                if (mat[i][mid] == 1) {
+                    firstOne = mid;
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+
+            int ones = m - firstOne;
+
+            if (ones > maxOnes) {
+                maxOnes = ones;
+                ans = i;
+            }
+        }
+
+        return ans;
+    }
+};
+
+Search in a 2D matrix
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& mat, int target) {
+        int n = mat.size();
+        int m = mat[0].size();
+
+        int low = 0, high = n * m - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            int row = mid / m;
+            int col = mid % m;
+
+            if (mat[row][col] == target)
+                return true;
+            else if (mat[row][col] < target)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return false;
+    }
+};
+
+Search in 2D matrix - II
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+
+        int row = 0;
+        int col = m - 1;
+
+        while (row < n && col >= 0) {
+            if (matrix[row][col] == target)
+                return true;
+            else if (matrix[row][col] > target)
+                col--;
+            else
+                row++;
+        }
+
+        return false;
+    }
+};
+
+Find Peak Element - II
+
+class Solution {
+public:
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+
+        int low = 0, high = m - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            int row = 0;
+            for (int i = 1; i < n; i++) {
+                if (mat[i][mid] > mat[row][mid])
+                    row = i;
+            }
+
+            int left = (mid > 0) ? mat[row][mid - 1] : -1;
+            int right = (mid < m - 1) ? mat[row][mid + 1] : -1;
+
+            if (mat[row][mid] > left && mat[row][mid] > right)
+                return {row, mid};
+
+            if (mat[row][mid] < left)
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+
+        return {-1, -1};
+    }
+};
+
+Matrix Median
+
+class Solution {
+public:
+    int findMedian(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+
+        int low = INT_MAX, high = INT_MIN;
+
+        for (int i = 0; i < n; i++) {
+            low = min(low, matrix[i][0]);
+            high = max(high, matrix[i][m - 1]);
+        }
+
+        int req = (n * m) / 2;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            int cnt = 0;
+
+            for (int i = 0; i < n; i++) {
+                cnt += upper_bound(matrix[i].begin(), matrix[i].end(), mid) - matrix[i].begin();
+            }
+
+            if (cnt <= req)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+
+        return low;
+    }
+};
+
+
+
+
+
+
+
+

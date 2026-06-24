@@ -1,0 +1,2821 @@
+String to Integer (atoi)
+class Solution {
+public:
+    int myAtoi(string input) {
+        int i=0,n=input.size();
+        while (i<n && input[i] == ' ')
+            i++;
+        int sign=1;
+        if (i<n && (input[i] == '+' || input[i] == '-')) {
+            if (input[i] == '-')
+                sign = -1;
+            i++;
+        }
+        long long num = 0;
+        while (i < n && isdigit(input[i])) {
+            num = num * 10 + (input[i] - '0');
+            if (sign * num > INT_MAX)
+                return INT_MAX;
+            if (sign * num < INT_MIN)
+                return INT_MIN;
+            i++;
+        }
+        return sign * num;
+    }
+};
+
+
+Pow(x,n)
+class Solution {
+public:
+    double myPow(double x, int n) {
+        long long N = n;
+        if (N < 0) {
+            x = 1.0 / x;
+            N = -N;
+        }
+        double ans = 1.0;
+        while (N > 0) {
+            if (N & 1)
+                ans *= x;            
+            x *= x;
+            N >>= 1;
+        }
+        return ans;
+    }
+};
+
+
+Count Good Numbers
+class Solution {
+public:
+    long long MOD = 1e9 + 7;
+    long long power(long long a, long long b) {
+        if (b == 0) return 1;
+        long long half = power(a, b / 2);
+        long long ans = (half * half) % MOD;
+        if (b & 1)
+            ans = (ans * a) % MOD;
+        return ans;
+    }
+    int countGoodNumbers(long long n) {
+        long long even = (n + 1) / 2;
+        long long odd = n / 2;
+        long long ans = (power(5, even) * power(4, odd)) % MOD;
+        return (int)ans;
+    }
+};
+
+
+Sort a Stack
+class Solution {
+public:
+    void insert(stack<int>& st, int x) {
+        if (st.empty() || x > st.top()) {
+            st.push(x);
+            return;
+        }
+        int temp = st.top();
+        st.pop();
+        insert(st, x);
+        st.push(temp);
+    }
+    void sortStack(stack<int> &st) {
+        if (st.empty()) return;
+        int x = st.top();
+        st.pop();
+        sortStack(st);
+        insert(st, x);
+    }
+};
+
+
+Reverse a Stack
+class Solution {
+public:
+    void insertAtBottom(stack<int>& st, int x) {
+        if (st.empty()) {
+            st.push(x);
+            return;
+        }
+        int top = st.top();
+        st.pop();
+        insertAtBottom(st, x);
+        st.push(top);
+    }
+    void reverseStack(stack<int> &st) {
+        if (st.empty()) return;
+        int top = st.top();
+        st.pop();
+        reverseStack(st);
+        insertAtBottom(st, top);
+    }
+};
+
+
+Generate Binary Strings Without Consecutive 1s
+class Solution {
+public:
+    void solve(string s, int n, vector<string>& ans) {
+        if (s.size() == n) {
+            ans.push_back(s);
+            return;
+        }
+        solve(s + '0', n, ans);
+        if (s.empty() || s[s.size() - 1] != '1') {
+            solve(s + '1', n, ans);
+        }
+    }
+    vector<string> generateBinaryStrings(int n) {
+        vector<string> ans;
+        solve("", n, ans);
+        return ans;
+    }
+};
+
+
+Generate Parentheses
+class Solution {
+public:
+    void solve(int open, int close, int n, string s,  
+      vector<string>& ans) {
+        if (s.size() == 2 * n) {
+            ans.push_back(s);
+            return;
+        }
+        if (open < n) {
+            solve(open + 1, close, n, s + '(', ans);
+        }
+        if (close < open) {
+            solve(open, close + 1, n, s + ')', ans);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        solve(0, 0, n, "", ans);
+        return ans;
+    }
+};
+
+
+Power Set
+class Solution {
+public:
+    void solve(int idx, vector<int>& nums,
+               vector<int>& curr,
+               vector<vector<int>>& ans) {
+        if (idx == nums.size()) {
+            ans.push_back(curr);
+            return;
+        }
+        curr.push_back(nums[idx]);
+        solve(idx + 1, nums, curr, ans);
+        curr.pop_back();
+        solve(idx + 1, nums, curr, ans);
+    }
+    vector<vector<int>> powerSet(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> curr;
+        solve(0, nums, curr, ans);
+        return ans;
+    }
+};
+
+
+Count all subsequences with sum K
+class Solution {
+public:
+    int solve(int idx, int sum, vector<int>& nums, int cnt) {
+        if (idx == nums.size()) {
+            if (sum == 0 && cnt > 0) return 1;
+            return 0;
+        }
+        int pick = solve(idx + 1, sum - nums[idx], nums, cnt + 1);
+        int notPick = solve(idx + 1, sum, nums, cnt);
+        return pick + notPick;
+    }
+    int countSubsequenceWithTargetSum(vector<int>& nums, int k) {
+        return solve(0, k, nums, 0);
+    }
+};
+
+
+Check if there exists a subsequence with sum K
+class Solution {
+public:
+    bool solve(int idx, int target, vector<int>& nums) {
+        if (idx == nums.size()) {
+            return target == 0;
+        }
+        if (solve(idx + 1, target - nums[idx], nums))
+            return true;
+        if (solve(idx + 1, target, nums))
+            return true;
+        return false;
+    }
+    bool checkSubsequenceSum(vector<int>& nums, int k) {
+        return solve(0, k, nums);
+    }
+};
+
+
+Combination Sum
+class Solution {
+public:
+    void solve(int idx, int target, vector<int>& candidates,
+               vector<int>& ds, vector<vector<int>>& ans) {
+        if (idx == candidates.size()) {
+            if (target == 0)
+                ans.push_back(ds);
+            return;
+        }
+        if (candidates[idx] <= target) {
+            ds.push_back(candidates[idx]);
+            solve(idx, target - candidates[idx], candidates, ds, ans);
+            ds.pop_back();
+        }
+        solve(idx + 1, target, candidates, ds, ans);
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> ds;
+        solve(0, target, candidates, ds, ans);
+        return ans;
+    }
+};
+
+
+Combination Sum II
+class Solution {
+public:
+    void solve(int idx, int target, vector<int>& candidates,
+               vector<int>& ds, vector<vector<int>>& ans) {
+        if (target == 0) {
+            ans.push_back(ds);
+            return;
+        }
+        for (int i = idx; i < candidates.size(); i++) {
+            if (i > idx && candidates[i] == candidates[i - 1])
+                continue;
+            if (candidates[i] > target)
+                break;
+            ds.push_back(candidates[i]);
+            solve(i + 1, target - candidates[i],
+                  candidates, ds, ans);
+            ds.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> ans;
+        vector<int> ds;
+        solve(0, target, candidates, ds, ans);
+        return ans;
+    }
+};
+
+
+Subsets I
+class Solution {
+public:
+    void solve(int idx, int sum, vector<int>& nums, vector<int>& ans) {
+        if (idx == nums.size()) {
+            ans.push_back(sum);
+            return;
+        }
+        solve(idx + 1, sum + nums[idx], nums, ans);
+        solve(idx + 1, sum, nums, ans);
+    }
+    vector<int> subsetSums(vector<int>& nums) {
+        vector<int> ans;
+        solve(0, 0, nums, ans);
+        return ans;
+    }
+};
+
+
+Subsets II
+class Solution {
+public:
+    void solve(int idx, vector<int>& nums,
+               vector<int>& curr,
+               vector<vector<int>>& ans) {
+        ans.push_back(curr);
+        for (int i = idx; i < nums.size(); i++) {
+            if (i != idx && nums[i] == nums[i - 1])
+                continue;
+            curr.push_back(nums[i]);
+            solve(i + 1, nums, curr, ans);
+            curr.pop_back();
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> ans;
+        vector<int> curr;
+        solve(0, nums, curr, ans);
+        return ans;
+    }
+};
+
+
+Combination Sum III
+class Solution {
+public:
+    void solve(int start, int k, int target,
+               vector<int>& ds,
+               vector<vector<int>>& ans) {
+        if (k == 0) {
+            if (target == 0)
+                ans.push_back(ds);
+            return;
+        }
+        for (int i = start; i <= 9; i++) {
+            if (i > target)
+                break;
+            ds.push_back(i);
+            solve(i + 1, k - 1, target - i, ds, ans);
+            ds.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> ans;
+        vector<int> ds;
+        solve(1, k, n, ds, ans);
+        return ans;
+    }
+};
+
+
+Letter Combinations of a Phone Number
+class Solution {
+public:
+    void solve(int idx, string &digits, string &curr,
+              vector<string> &ans, vector<string> &mp) {
+        if (idx == digits.size()) {
+            ans.push_back(curr);
+            return;
+        }
+        string letters = mp[digits[idx] - '0'];
+        for (int i = 0; i < letters.size(); i++) {
+            curr.push_back(letters[i]);
+            solve(idx + 1, digits, curr, ans, mp);
+            curr.pop_back();
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty()) return {};
+        vector<string> mp(10);
+        mp[2] = "abc";
+        mp[3] = "def";
+        mp[4] = "ghi";
+        mp[5] = "jkl";
+        mp[6] = "mno";
+        mp[7] = "pqrs";
+        mp[8] = "tuv";
+        mp[9] = "wxyz";
+        vector<string> ans;
+        string curr;
+        solve(0, digits, curr, ans, mp);
+        return ans;
+    }
+};
+
+
+Palindrome partitioning
+class Solution {
+public:
+    bool isPalindrome(string &s, int left, int right) {
+        while (left < right) {
+            if (s[left] != s[right])
+                return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+    void solve(int idx, string &s,
+               vector<string> &ds,
+               vector<vector<string>> &ans) {
+        if (idx == s.size()) {
+            ans.push_back(ds);
+            return;
+        }
+        for (int i = idx; i < s.size(); i++) {
+            if (isPalindrome(s, idx, i)) {
+                ds.push_back(s.substr(idx, i - idx + 1));
+                solve(i + 1, s, ds, ans);
+                ds.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> ds;
+        solve(0, s, ds, ans);
+        return ans;
+    }
+};
+
+
+Word Search
+class Solution {
+public:
+    bool dfs(int row, int col, int idx,
+             vector<vector<char>>& board,
+             string& word) {
+        if (idx == word.size())
+            return true;
+        int n = board.size();
+        int m = board[0].size();
+        if (row < 0 || col < 0 || row >= n || col >= m ||
+            board[row][col] != word[idx])
+            return false;
+        char temp = board[row][col];
+        board[row][col] = '#';
+        bool found =
+            dfs(row + 1, col, idx + 1, board, word) ||
+            dfs(row - 1, col, idx + 1, board, word) ||
+            dfs(row, col + 1, idx + 1, board, word) ||
+            dfs(row, col - 1, idx + 1, board, word);
+        board[row][col] = temp;
+        return found;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        int n = board.size();
+        int m = board[0].size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (dfs(i, j, 0, board, word))
+                    return true;
+            }
+        }
+        return false;
+    }
+};
+
+
+N Queen
+class Solution {
+public:
+    void solve(int col, int n,
+               vector<string>& board,
+               vector<vector<string>>& ans,
+               vector<int>& leftRow,
+               vector<int>& upperDiagonal,
+               vector<int>& lowerDiagonal) {
+        if (col == n) {
+            ans.push_back(board);
+            return;
+        }
+        for (int row = 0; row < n; row++) {
+            if (leftRow[row] == 0 &&
+                lowerDiagonal[row + col] == 0 &&
+                upperDiagonal[n - 1 + col - row] == 0) {
+                board[row][col] = 'Q';
+                leftRow[row] = 1;
+                lowerDiagonal[row + col] = 1;
+                upperDiagonal[n - 1 + col - row] = 1;
+                solve(col + 1, n, board, ans,
+                      leftRow, upperDiagonal, lowerDiagonal);
+                board[row][col] = '.';
+                leftRow[row] = 0;
+                lowerDiagonal[row + col] = 0;
+                upperDiagonal[n - 1 + col - row] = 0;
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board(n, string(n, '.'));
+        vector<int> leftRow(n, 0);
+        vector<int> upperDiagonal(2 * n - 1, 0);
+        vector<int> lowerDiagonal(2 * n - 1, 0);
+        solve(0, n, board, ans,
+              leftRow, upperDiagonal, lowerDiagonal);
+        return ans;
+    }
+};
+
+
+Rat in a Maze
+class Solution {
+public:
+    void solve(int row, int col,
+               vector<vector<int>>& grid,
+               vector<vector<int>>& vis,
+               string path,
+               vector<string>& ans) {
+        int n = grid.size();
+        if (row == n - 1 && col == n - 1) {
+            ans.push_back(path);
+            return;
+        }
+        vis[row][col] = 1;
+        if (row + 1 < n && !vis[row + 1][col] &&
+            grid[row + 1][col] == 1) {
+            solve(row + 1, col, grid, vis,
+                  path + 'D', ans);
+        }
+        if (col - 1 >= 0 && !vis[row][col - 1] &&
+            grid[row][col - 1] == 1) {
+            solve(row, col - 1, grid, vis,
+                  path + 'L', ans);
+        }
+        if (col + 1 < n && !vis[row][col + 1] &&
+            grid[row][col + 1] == 1) {
+            solve(row, col + 1, grid, vis,
+                  path + 'R', ans);
+        }
+        if (row - 1 >= 0 && !vis[row - 1][col] &&
+            grid[row - 1][col] == 1) {
+            solve(row - 1, col, grid, vis,
+                  path + 'U', ans);
+        }
+        vis[row][col] = 0;
+    }
+    vector<string> findPath(vector<vector<int>>& grid) {
+        vector<string> ans;
+        int n = grid.size();
+        if (grid[0][0] == 0)
+            return ans;
+        vector<vector<int>> vis(n, vector<int>(n, 0));
+        solve(0, 0, grid, vis, "", ans);
+        return ans;
+    }
+};
+
+
+Word Break
+class Solution {
+public:
+    bool solve(int idx, string &s, unordered_set<string> &st,
+               vector<int> &dp) {
+        if (idx == s.size())
+            return true;
+        if (dp[idx] != -1)
+            return dp[idx];
+        string temp = "";
+        for (int i = idx; i < s.size(); i++) {
+            temp += s[i];
+            if (st.find(temp) != st.end()) {
+                if (solve(i + 1, s, st, dp))
+                    return dp[idx] = true;
+            }
+        }
+        return dp[idx] = false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> st(wordDict.begin(), wordDict.end());
+        vector<int> dp(s.size(), -1);
+        return solve(0, s, st, dp);
+    }
+};
+
+
+M Coloring Problem
+class Solution {
+public:
+    bool isSafe(int node, int color,
+                vector<int>& colors,
+                vector<vector<int>>& adj) {
+        for (int neigh : adj[node]) {
+            if (colors[neigh] == color)
+                return false;
+        }
+        return true;
+    }
+    bool solve(int node, int m, int n,
+               vector<int>& colors,
+               vector<vector<int>>& adj) {
+        if (node == n)
+            return true;
+        for (int color = 1; color <= m; color++) {
+            if (isSafe(node, color, colors, adj)) {
+                colors[node] = color;
+                if (solve(node + 1, m, n, colors, adj))
+                    return true;
+                colors[node] = 0;
+            }
+        }
+        return false;
+    }
+    bool graphColoring(vector<vector<int>>& edges, int m, int n) {
+        vector<vector<int>> adj(n);
+        for (auto &e : edges) {
+            int u = e[0];
+            int v = e[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        vector<int> colors(n, 0);
+        return solve(0, m, n, colors, adj);
+    }
+};
+
+
+Sudoku Solver
+class Solution {
+public:
+    bool isValid(vector<vector<char>>& board,
+                 int row, int col, char ch) {
+        for (int i = 0; i < 9; i++) {
+            if (board[row][i] == ch)
+                return false;
+            if (board[i][col] == ch)
+                return false;
+            if (board[3 * (row / 3) + i / 3]
+                     [3 * (col / 3) + i % 3] == ch)
+                return false;
+        }
+        return true;
+    }
+    bool solve(vector<vector<char>>& board) {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == '.') {
+                    for (char ch = '1'; ch <= '9'; ch++) {
+                        if (isValid(board, row, col, ch)) {
+                            board[row][col] = ch;
+                            if (solve(board))
+                                return true;
+                            board[row][col] = '.';
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        solve(board);
+    }
+};
+
+
+Expression Add Operators
+class Solution {
+public:
+    void solve(int idx, string& num, long long target,
+               long long sum, long long prev,
+               string expr, vector<string>& ans) {
+        if (idx == num.size()) {
+            if (sum == target)
+                ans.push_back(expr);
+            return;
+        }
+        long long currNum = 0;
+        string currStr = "";
+        for (int i = idx; i < num.size(); i++) {
+            if (i > idx && num[idx] == '0')
+                break;
+            currStr += num[i];
+            currNum = currNum * 10 + (num[i] - '0');
+            if (idx == 0) {
+                solve(i + 1, num, target,
+                      currNum, currNum,
+                      currStr, ans);
+            }
+            else {
+                solve(i + 1, num, target,
+                      sum + currNum, currNum,
+                      expr + "+" + currStr, ans);
+                solve(i + 1, num, target,
+                      sum - currNum, -currNum,
+                      expr + "-" + currStr, ans);
+                solve(i + 1, num, target,
+                      sum - prev + prev * currNum,
+                      prev * currNum,
+                      expr + "*" + currStr, ans);
+            }
+        }
+    }
+    vector<string> addOperators(string s, int target) {
+        vector<string> ans;
+        solve(0, s, target, 0, 0, "", ans);
+        return ans;
+    }
+};
+
+
+Check if the i-th bit is Set or Not
+class Solution {
+public:
+    bool checkIthBit(int n, int i) {
+        return (n&(1<<i))!=0;
+    }
+};
+
+
+Check if a Number is Odd or Not
+class Solution {
+public:
+    bool isOdd(int n) {
+        return n % 2 != 0;
+    }
+};
+
+
+Check if a Number is Power of 2 or Not
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+};
+
+
+Count the Number of Set Bits
+class Solution {
+public:
+    int countSetBits(int n) {
+        int count = 0;
+        while (n > 0) {
+            count += (n & 1);
+            n >>= 1;
+        }
+        return count;
+    }
+
+
+Swap Two Numbers
+class Solution {
+public:
+    void swap(int &a, int &b) {
+        a = a + b;
+        b = a - b;
+        a = a - b;
+    }
+};
+
+
+Divide two numbers without multiplication and division
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if (dividend == INT_MIN && divisor == -1)
+            return INT_MAX;
+        long long a = llabs((long long)dividend);
+        long long b = llabs((long long)divisor);
+        long long quotient = 0;
+        while (a >= b) {
+            long long temp = b;
+            long long multiple = 1;
+            while ((temp << 1) <= a) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            a -= temp;
+            quotient += multiple;
+        }
+        if ((dividend < 0) ^ (divisor < 0))
+            quotient = -quotient;
+        return (int)quotient;
+    }
+};
+
+
+Minimum Bit Flips to Convert Number
+class Solution {
+public:
+    int minBitsFlip(int start, int goal) {
+        int x = start ^ goal;
+        int count = 0;
+        while (x) {
+            count += (x & 1);
+            x >>= 1;
+        }
+        return count;
+    }
+};
+
+
+Single Number - I
+class Solution{    
+public:    
+    int singleNumber(vector<int>& nums){
+        for (int i = 0; i < nums.size(); i++) {
+            int count = 0;
+            for (int j=0; j<nums.size();j++) {
+                if (nums[i] == nums[j]) {
+                    count++;
+                }
+            }
+            if (count==1) {
+                return nums[i];
+            }
+        }
+        return -1;
+    }
+};
+
+
+Power Set Bit Manipulation
+class Solution {
+public:
+    vector<vector<int>> powerSet(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> ans;
+        for (int mask = 0; mask < (1 << n); mask++) {
+            vector<int> subset;
+            for (int j = 0; j < n; j++) {
+                if (mask & (1 << j)) {
+                    subset.push_back(nums[j]);
+                }
+            }
+            ans.push_back(subset);
+        }
+        return ans;
+    }
+};
+
+
+XOR of numbers in a given range
+class Solution {
+public:
+    int xorUpto(int n) {
+        if (n % 4 == 0) return n;
+        if (n % 4 == 1) return 1;
+        if (n % 4 == 2) return n + 1;
+        return 0;
+    }
+    int findRangeXOR(int l, int r) {
+        return xorUpto(r) ^ xorUpto(l - 1);
+    }
+};
+
+
+Single Number - III
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int xorr = 0;
+        for (int num : nums) {
+            xorr ^= num;
+        }
+        int rightmostSetBit = xorr & (-xorr);
+        int a = 0, b = 0;
+        for (int num : nums) {
+            if (num & rightmostSetBit)
+                a ^= num;
+            else
+                b ^= num;
+        }
+        if (a > b) swap(a, b);
+        return {a, b};
+    }
+};
+
+
+Prime factorisation of a Number
+class Solution {
+public:
+    vector<vector<int>> primeFactors(vector<int>& queries) {
+        vector<vector<int>> ans;
+        for (int n : queries) {
+            vector<int> factors;
+            while (n % 2 == 0) {
+                factors.push_back(2);
+                n /= 2;
+            }
+            for (int i = 3; i * i <= n; i += 2) {
+                while (n % i == 0) {
+                    factors.push_back(i);
+                    n /= i;
+                }
+            }
+            if (n > 1) {
+                factors.push_back(n);
+            }
+            ans.push_back(factors);
+        }
+        return ans;
+    }
+};
+
+
+Divisors of a Number
+class Solution {
+public:
+    vector<int> divisors(int n) {
+        vector<int> ans;
+        for (int i=1;i*i<=n;i++) {
+            if (n % i ==0) {
+                ans.push_back(i);
+                if (i != n / i)
+                    ans.push_back(n / i);
+            }
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
+
+
+Count primes in range L to R
+class Solution {
+public:
+    vector<int> primesInRange(vector<vector<int>>& queries) {
+        int maxR = 0;
+        for (auto &q : queries) {
+            maxR = max(maxR, q[1]);
+        }
+        vector<bool> isPrime(maxR + 1, true);
+        if (maxR >= 0) isPrime[0] = false;
+        if (maxR >= 1) isPrime[1] = false;
+        for (int i = 2; i * i <= maxR; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j <= maxR; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        vector<int> prefix(maxR + 1, 0);
+        for (int i = 1; i <= maxR; i++) {
+            prefix[i] = prefix[i - 1] + (isPrime[i] ? 1 : 0);
+        }
+        vector<int> ans;
+        for (auto &q : queries) {
+            int l = q[0];
+            int r = q[1];
+            int count = prefix[r] - (l > 1 ? prefix[l - 1] : 0);
+            ans.push_back(count);
+        }
+        return ans;
+    }
+};
+
+
+Prime factorisation of a Number
+class Solution {
+public:
+    vector<vector<int>> primeFactors(vector<int>& queries) {
+        vector<vector<int>> ans;
+        for (int n : queries) {
+            vector<int> factors;
+            while (n % 2 == 0) {
+                factors.push_back(2);
+                n /= 2;
+            }
+            for (int i = 3; i * i <= n; i += 2) {
+                while (n % i == 0) {
+                    factors.push_back(i);
+                    n /= i;
+                }
+            }
+            if (n > 1) {
+                factors.push_back(n);
+            }
+            ans.push_back(factors);
+        }
+        return ans;
+    }
+};
+
+
+Pow(x,n)
+class Solution {
+public:
+    double myPow(double x, int n) {
+        long long N = n;
+        if (N < 0) {
+            x = 1.0 / x;
+            N = -N;
+        }
+        double ans = 1.0;
+        while (N > 0) {
+            if (N & 1)
+                ans *= x;            
+            x *= x;
+            N >>= 1;
+        }
+        return ans;
+    }
+};
+
+
+Insertion at the head of Linked List
+
+ListNode* insertAtHead(ListNode* &head, int X) {
+    ListNode* newNode = new ListNode(X);
+    newNode->next = head;
+    head = newNode;
+    return head;
+}
+
+Deletion of the head of LL
+ListNode* deleteHead(ListNode* &head) {
+    if(head == NULL) return NULL;
+    head = head->next;
+    return head;
+}
+
+Find the length of the Linked List
+int getLength(ListNode* head) {
+    int count = 0;
+    while(head != NULL) {
+        count++;
+        head = head->next;
+    }
+    return count;
+}
+
+Search in Linked List
+bool searchKey(ListNode* head, int key) {
+    while(head != NULL) {
+        if(head->val == key) {
+            return true;
+        }
+        head = head->next;
+    }
+    return false;
+}
+
+Insert node before head in Doubly Linked List
+ListNode* insertBeforeHead(ListNode* head, int X) {
+    ListNode* newNode = new ListNode(X);
+    newNode->next = head;
+    
+    if(head != NULL) {
+        head->prev = newNode;
+    }
+    
+    return newNode;
+}
+
+Delete head of Doubly Linked List
+
+ListNode* deleteHead(ListNode* &head) {
+    if(head == NULL) return NULL;
+    
+    head = head->next;
+    
+    if(head != NULL) {
+        head->prev = NULL;
+    }
+    
+    return head;
+}
+
+Reverse a Doubly Linked List
+
+ListNode* reverseDLL(ListNode* head) {
+    ListNode* temp = NULL;
+    ListNode* current = head;
+
+    while(current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+
+    if(temp != NULL) {
+        head = temp->prev;
+    }
+
+    return head;
+}
+
+Find Middle of Linked List
+
+ListNode* middleOfLinkedList(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+Reverse a LL
+
+ListNode* reverseList(ListNode* head) {
+    ListNode* prev = NULL;
+    ListNode* curr = head;
+    
+    while(curr != NULL) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    
+    return prev;
+}
+
+Detect a loop in LL
+
+bool hasCycle(ListNode *head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+Find the starting point in LL
+
+ListNode* findStartingPoint(ListNode *head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            slow = head;
+
+            while(slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+
+            return slow;
+        }
+    }
+
+    return NULL;
+}
+
+Length of loop in LL
+
+int findLengthOfLoop(ListNode *head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast) {
+            int count = 1;
+            fast = fast->next;
+
+            while(slow != fast) {
+                count++;
+                fast = fast->next;
+            }
+
+            return count;
+        }
+    }
+
+    return 0;
+}
+
+Check if LL is palindrome or not
+
+bool isPalindrome(ListNode* head) {
+    if(head == NULL || head->next == NULL) return true;
+
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while(fast->next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    ListNode* prev = NULL;
+    ListNode* curr = slow->next;
+
+    while(curr != NULL) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+
+    ListNode* first = head;
+    ListNode* second = prev;
+
+    while(second != NULL) {
+        if(first->val != second->val) {
+            return false;
+        }
+        first = first->next;
+        second = second->next;
+    }
+
+    return true;
+}
+
+Segregate odd and even nodes in Linked List
+
+ListNode* oddEvenList(ListNode* &head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    ListNode* odd = head;
+    ListNode* even = head->next;
+    ListNode* evenHead = even;
+
+    while(even != NULL && even->next != NULL) {
+        odd->next = even->next;
+        odd = odd->next;
+
+        even->next = odd->next;
+        even = even->next;
+    }
+
+    odd->next = evenHead;
+
+    return head;
+}
+
+Remove Nth node from the back of the LL
+
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode* fast = head;
+    ListNode* slow = head;
+
+    for(int i = 0; i < n; i++) {
+        fast = fast->next;
+    }
+
+    if(fast == NULL) {
+        return head->next;
+    }
+
+    while(fast->next != NULL) {
+        fast = fast->next;
+        slow = slow->next;
+    }
+
+    slow->next = slow->next->next;
+
+    return head;
+}
+
+Delete the middle node in LL
+ListNode* deleteMiddle(ListNode* head) {
+    if(head == NULL || head->next == NULL) {
+        return NULL;
+    }
+
+    ListNode* slow = head;
+    ListNode* fast = head;
+    ListNode* prev = NULL;
+
+    while(fast != NULL && fast->next != NULL) {
+        prev = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    prev->next = slow->next;
+
+    return head;
+}
+
+Sort LL
+ListNode* merge(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &dummy;
+
+    while(l1 && l2) {
+        if(l1->val <= l2->val) {
+            tail->next = l1;
+            l1 = l1->next;
+        } else {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
+    }
+
+    if(l1) tail->next = l1;
+    else tail->next = l2;
+
+    return dummy.next;
+}
+
+ListNode* findMid(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head->next;
+
+    while(fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+ListNode* sortList(ListNode* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    ListNode* mid = findMid(head);
+    ListNode* right = mid->next;
+    mid->next = NULL;
+
+    ListNode* left = sortList(head);
+    right = sortList(right);
+
+    return merge(left, right);
+}
+
+Sort a Linked List of 0's 1's and 2's
+ListNode* sortList(ListNode* &head) {
+    int count0 = 0, count1 = 0, count2 = 0;
+
+    ListNode* temp = head;
+
+    while(temp != NULL) {
+        if(temp->data == 0) count0++;
+        else if(temp->data == 1) count1++;
+        else count2++;
+        temp = temp->next;
+    }
+
+    temp = head;
+
+    while(count0--) {
+        temp->data = 0;
+        temp = temp->next;
+    }
+
+    while(count1--) {
+        temp->data = 1;
+        temp = temp->next;
+    }
+
+    while(count2--) {
+        temp->data = 2;
+        temp = temp->next;
+    }
+
+    return head;
+}
+
+Find the intersection point of Y LL
+
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+    ListNode* a = headA;
+    ListNode* b = headB;
+
+    while(a != b) {
+        a = (a == NULL) ? headB : a->next;
+        b = (b == NULL) ? headA : b->next;
+    }
+
+    return a;
+}
+
+Add one to a number represented by LL
+ListNode* reverse(ListNode* head) {
+    ListNode* prev = NULL;
+    ListNode* curr = head;
+
+    while(curr != NULL) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+
+    return prev;
+}
+
+ListNode* addOne(ListNode* head) {
+    head = reverse(head);
+
+    ListNode* temp = head;
+    int carry = 1;
+
+    while(temp != NULL) {
+        int sum = temp->val + carry;
+        temp->val = sum % 10;
+        carry = sum / 10;
+
+        if(carry == 0) break;
+
+        if(temp->next == NULL && carry) {
+            temp->next = new ListNode(carry);
+            carry = 0;
+            break;
+        }
+
+        temp = temp->next;
+    }
+
+    return reverse(head);
+}
+
+
+Add two numbers in Linked List
+ListNode* addTwoNumbers(ListNode* &linkedList1, ListNode* &linkedList2) {
+    ListNode dummy(0);
+    ListNode* temp = &dummy;
+    int carry = 0;
+
+    while(linkedList1 != NULL || linkedList2 != NULL || carry) {
+        int sum = carry;
+
+        if(linkedList1 != NULL) {
+            sum += linkedList1->data;
+            linkedList1 = linkedList1->next;
+        }
+
+        if(linkedList2 != NULL) {
+            sum += linkedList2->data;
+            linkedList2 = linkedList2->next;
+        }
+
+        carry = sum / 10;
+        temp->next = new ListNode(sum % 10);
+        temp = temp->next;
+    }
+
+    return dummy.next;
+}
+
+Delete all occurrences of a key in DLL
+
+ListNode* deleteAllOccurrences(ListNode* head, int target) {
+    ListNode* curr = head;
+
+    while(curr != NULL) {
+        if(curr->val == target) {
+            if(curr == head) {
+                head = head->next;
+                if(head) head->prev = NULL;
+            } else {
+                if(curr->prev) curr->prev->next = curr->next;
+                if(curr->next) curr->next->prev = curr->prev;
+            }
+        }
+        curr = curr->next;
+    }
+
+    return head;
+}
+
+Find Pairs with Given Sum in Doubly Linked List
+
+vector<vector<int>> findPairsWithGivenSum(ListNode* head, int target) {
+    vector<vector<int>> ans;
+
+    if(head == NULL) return ans;
+
+    ListNode* left = head;
+    ListNode* right = head;
+
+    while(right->next != NULL) {
+        right = right->next;
+    }
+
+    while(left != right && right->next != left) {
+        int sum = left->val + right->val;
+
+        if(sum == target) {
+            ans.push_back({left->val, right->val});
+            left = left->next;
+            right = right->prev;
+        }
+        else if(sum < target) {
+            left = left->next;
+        }
+        else {
+            right = right->prev;
+        }
+    }
+
+    return ans;
+}
+
+Remove duplicates from sorted DLL
+
+ListNode* removeDuplicates(ListNode* head) {
+    if(head == NULL) return head;
+
+    ListNode* curr = head;
+
+    while(curr != NULL && curr->next != NULL) {
+        if(curr->val == curr->next->val) {
+            ListNode* temp = curr->next;
+            curr->next = temp->next;
+
+            if(temp->next != NULL) {
+                temp->next->prev = curr;
+            }
+        } else {
+            curr = curr->next;
+        }
+    }
+
+    return head;
+}
+
+Reverse LL in group of given size K
+
+ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode* temp = head;
+    
+    for(int i = 0; i < k; i++) {
+        if(temp == NULL) return head;
+        temp = temp->next;
+    }
+
+    ListNode* prev = NULL;
+    ListNode* curr = head;
+    ListNode* next = NULL;
+    int count = 0;
+
+    while(curr != NULL && count < k) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+        count++;
+    }
+
+    if(next != NULL) {
+        head->next = reverseKGroup(next, k);
+    }
+
+    return prev;
+}
+
+Rotate a LL
+ListNode* rotateRight(ListNode* head, int k) {
+    if(head == NULL || head->next == NULL || k == 0) {
+        return head;
+    }
+
+    int len = 1;
+    ListNode* tail = head;
+
+    while(tail->next != NULL) {
+        tail = tail->next;
+        len++;
+    }
+
+    k = k % len;
+    if(k == 0) return head;
+
+    tail->next = head;
+
+    int steps = len - k;
+    ListNode* newTail = head;
+
+    for(int i = 1; i < steps; i++) {
+        newTail = newTail->next;
+    }
+
+    ListNode* newHead = newTail->next;
+    newTail->next = NULL;
+
+    return newHead;
+}
+
+Flattening of LL
+class Solution {
+public:
+    ListNode* flattenLinkedList(ListNode* &head) {
+        if(head == NULL || head->next == NULL)
+            return head;
+
+        ListNode* right = flattenLinkedList(head->next);
+
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+
+        ListNode* down = head;
+
+        while(down && right) {
+            if(down->val < right->val) {
+                tail->child = down;
+                down = down->child;
+            }
+            else {
+                tail->child = right;
+                right = right->child;
+            }
+            tail = tail->child;
+        }
+
+        if(down) tail->child = down;
+        else tail->child = right;
+
+        head = dummy.child;
+        head->next = NULL;
+
+        return head;
+    }
+};
+
+Clone a LL with random and next pointer
+class Solution {
+public:
+    ListNode* copyRandomList(ListNode* head) {
+        if(head == NULL) return NULL;
+
+        ListNode* temp = head;
+
+        while(temp) {
+            ListNode* copy = new ListNode(temp->val);
+            copy->next = temp->next;
+            temp->next = copy;
+            temp = copy->next;
+        }
+
+        temp = head;
+
+        while(temp) {
+            if(temp->random)
+                temp->next->random = temp->random->next;
+            temp = temp->next->next;
+        }
+
+        temp = head;
+        ListNode* newHead = head->next;
+
+        while(temp) {
+            ListNode* copy = temp->next;
+            temp->next = copy->next;
+
+            if(copy->next)
+                copy->next = copy->next->next;
+
+            temp = temp->next;
+        }
+
+        return newHead;
+    }
+};
+
+
+Implement Stack using Arrays
+class ArrayStack {
+    vector<int> st;
+
+public:
+    ArrayStack() {
+    }
+    
+    void push(int x) {
+        st.push_back(x);
+    }
+    
+    int pop() {
+        int x = st.back();
+        st.pop_back();
+        return x;
+    }
+    
+    int top() {
+        return st.back();
+    }
+    
+    bool isEmpty() {
+        return st.empty();
+    }
+};
+
+
+Implement Queue using Arrays
+class ArrayQueue {
+    vector<int> q;
+    int frontIdx;
+public:
+    ArrayQueue() {
+        frontIdx = 0;
+    }
+    void push(int x) {
+        q.push_back(x);
+    }
+    int pop() {
+        return q[frontIdx++];
+    }    
+    int peek() {
+        return q[frontIdx];
+    }  
+    bool isEmpty() {
+        return frontIdx == q.size();
+    }
+};
+
+
+Implement Stack using Queue
+class QueueStack {
+    queue<int> q;
+
+public:
+    QueueStack() {
+    }
+    
+    void push(int x) {
+        q.push(x);
+
+        int n = q.size();
+        for (int i = 0; i < n - 1; i++) {
+            q.push(q.front());
+            q.pop();
+        }
+    }
+    
+    int pop() {
+        int x = q.front();
+        q.pop();
+        return x;
+    }
+    
+    int top() {
+        return q.front();
+    }
+    
+    bool isEmpty() {
+        return q.empty();
+    }
+};
+
+
+Implement Queue using Stack
+class StackQueue {
+    stack<int> s1, s2;
+
+public:
+    StackQueue() {
+    }
+    
+    void push(int x) {
+        s1.push(x);
+    }
+    
+    int pop() {
+        if (s2.empty()) {
+            while (!s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+
+        int x = s2.top();
+        s2.pop();
+        return x;
+    }
+    
+    int peek() {
+        if (s2.empty()) {
+            while (!s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+
+        return s2.top();
+    }
+    
+    bool isEmpty() {
+        return s1.empty() && s2.empty();
+    }
+};
+
+
+Implement stack using LinkedList
+class Stack {
+    struct Node {
+        int data;
+        Node* next;
+
+        Node(int x) {
+            data = x;
+            next = NULL;
+        }
+    };
+
+    Node* topNode;
+    int sz;
+
+public:
+    Stack() {
+        topNode = NULL;
+        sz = 0;
+    }
+
+    void push(int x) {
+        Node* newNode = new Node(x);
+        newNode->next = topNode;
+        topNode = newNode;
+        sz++;
+    }
+
+    int pop() {
+        if (isEmpty()) return -1;
+
+        int x = topNode->data;
+        Node* temp = topNode;
+        topNode = topNode->next;
+
+        delete temp;
+        sz--;
+
+        return x;
+    }
+
+    int peek() {
+        if (isEmpty()) return -1;
+        return topNode->data;
+    }
+
+    bool isEmpty() {
+        return topNode == NULL;
+    }
+
+    int size() {
+        return sz;
+    }
+
+    void printStack() {
+        Node* curr = topNode;
+
+        while (curr != NULL) {
+            cout << curr->data << " ";
+            curr = curr->next;
+        }
+
+        cout << endl;
+    }
+};
+
+
+Implement queue using LinkedList
+class LinkedListQueue {
+    struct Node {
+        int data;
+        Node* next;
+
+        Node(int x) {
+            data = x;
+            next = NULL;
+        }
+    };
+
+    Node* front;
+    Node* rear;
+
+public:
+    LinkedListQueue() {
+        front = NULL;
+        rear = NULL;
+    }
+    
+    void push(int x) {
+        Node* newNode = new Node(x);
+
+        if (rear == NULL) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+    
+    int pop() {
+        if (isEmpty()) return -1;
+
+        int x = front->data;
+        Node* temp = front;
+
+        front = front->next;
+
+        if (front == NULL) {
+            rear = NULL;
+        }
+
+        delete temp;
+        return x;
+    }
+    
+    int peek() {
+        if (isEmpty()) return -1;
+        return front->data;
+    }
+    
+    bool isEmpty() {
+        return front == NULL;
+    }
+};
+
+
+Balanced Paranthesis
+class Solution {
+public:
+    bool isValid(string str) {
+        stack<char> st;
+
+        for (char ch : str) {
+            if (ch == '(' || ch == '{' || ch == '[') {
+                st.push(ch);
+            } else {
+                if (st.empty()) return false;
+
+                char top = st.top();
+                st.pop();
+
+                if ((ch == ')' && top != '(') ||
+                    (ch == '}' && top != '{') ||
+                    (ch == ']' && top != '[')) {
+                    return false;
+                }
+            }
+        }
+
+        return st.empty();
+    }
+};
+
+
+Implement Min Stack
+class MinStack {
+    stack<int> st;
+    stack<int> mn;
+
+public:
+    MinStack() {
+    }
+
+    void push(int value) {
+        st.push(value);
+
+        if (mn.empty() || value <= mn.top()) {
+            mn.push(value);
+        }
+    }
+
+    void pop() {
+        if (st.top() == mn.top()) {
+            mn.pop();
+        }
+        st.pop();
+    }
+
+    int top() {
+        return st.top();
+    }
+
+    int getMin() {
+        return mn.top();
+    }
+};
+
+
+Infix to Postfix Conversion
+class Solution {
+public:
+    int precedence(char op) {
+        if (op == '^') return 3;
+        if (op == '*' || op == '/') return 2;
+        if (op == '+' || op == '-') return 1;
+        return -1;
+    }
+
+    string infixToPostfix(string s) {
+        stack<char> st;
+        string ans;
+
+        for (char ch : s) {
+            if (isalnum(ch)) {
+                ans += ch;
+            }
+            else if (ch == '(') {
+                st.push(ch);
+            }
+            else if (ch == ')') {
+                while (!st.empty() && st.top() != '(') {
+                    ans += st.top();
+                    st.pop();
+                }
+                st.pop(); // remove '('
+            }
+            else { // operator
+                while (!st.empty() && st.top() != '(' &&
+                       (precedence(st.top()) > precedence(ch) ||
+                       (precedence(st.top()) == precedence(ch) && ch != '^'))) {
+                    ans += st.top();
+                    st.pop();
+                }
+                st.push(ch);
+            }
+        }
+
+        while (!st.empty()) {
+            ans += st.top();
+            st.pop();
+        }
+
+        return ans;
+    }
+};
+
+
+Prefix to Infix Conversion
+class Solution {
+public:
+    string prefixToInfix(string s) {
+        stack<string> st;
+
+        for (int i = s.size() - 1; i >= 0; i--) {
+            char ch = s[i];
+
+            if (isalnum(ch)) {
+                st.push(string(1, ch));
+            } 
+            else {
+                string op1 = st.top();
+                st.pop();
+
+                string op2 = st.top();
+                st.pop();
+
+                string expr = "(" + op1 + ch + op2 + ")";
+                st.push(expr);
+            }
+        }
+
+        return st.top();
+    }
+};
+
+
+Prefix to Postfix Conversion
+class Solution {
+public:
+    string prefixToPostfix(const string& s) {
+        stack<string> st;
+
+        for (int i = s.size() - 1; i >= 0; i--) {
+            char ch = s[i];
+
+            if (isalnum(ch)) {
+                st.push(string(1, ch));
+            } else {
+                string op1 = st.top();
+                st.pop();
+
+                string op2 = st.top();
+                st.pop();
+
+                st.push(op1 + op2 + ch);
+            }
+        }
+
+        return st.top();
+    }
+};
+
+
+Postfix to Prefix Conversion
+class Solution {
+public:
+    string prefixToPostfix(const string& s) {
+        stack<string> st;
+
+        for (int i = s.size() - 1; i >= 0; i--) {
+            char ch = s[i];
+
+            if (isalnum(ch)) {
+                st.push(string(1, ch));
+            } else {
+                string op1 = st.top();
+                st.pop();
+
+                string op2 = st.top();
+                st.pop();
+
+                st.push(op1 + op2 + ch);
+            }
+        }
+
+        return st.top();
+    }
+};
+
+
+Postfix to Infix Conversion
+class Solution {
+public:
+    string postToInfix(string postExp) {
+        stack<string> st;
+
+        for (char ch : postExp) {
+            if (islower(ch)) {
+                st.push(string(1, ch));
+            } else {
+                string right = st.top();
+                st.pop();
+
+                string left = st.top();
+                st.pop();
+
+                string expr = "(" + left + ch + right + ")";
+                st.push(expr);
+            }
+        }
+
+        return st.top();
+    }
+};
+
+
+Infix to Prefix Conversion
+class Solution {
+public:
+    int prec(char op) {
+        if (op == '+' || op == '-') return 1;
+        if (op == '*' || op == '/') return 2;
+        return 0;
+    }
+
+    string infixToPrefix(const string& s) {
+        string exp = s;
+        reverse(exp.begin(), exp.end());
+
+        for (char &ch : exp) {
+            if (ch == '(') ch = ')';
+            else if (ch == ')') ch = '(';
+        }
+
+        stack<char> st;
+        string postfix;
+
+        for (char ch : exp) {
+            if (islower(ch)) {
+                postfix += ch;
+            }
+            else if (ch == '(') {
+                st.push(ch);
+            }
+            else if (ch == ')') {
+                while (!st.empty() && st.top() != '(') {
+                    postfix += st.top();
+                    st.pop();
+                }
+                st.pop();
+            }
+            else { // operator
+                while (!st.empty() &&
+                       prec(st.top()) > prec(ch)) {
+                    postfix += st.top();
+                    st.pop();
+                }
+                st.push(ch);
+            }
+        }
+
+        while (!st.empty()) {
+            postfix += st.top();
+            st.pop();
+        }
+
+        reverse(postfix.begin(), postfix.end());
+        return postfix;
+    }
+};
+
+
+Next Greater Element
+class Solution {
+public:
+    vector<int> nextLargerElement(vector<int> arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && st.top() <= arr[i]) {
+                st.pop();
+            }
+
+            ans[i] = st.empty() ? -1 : st.top();
+            st.push(arr[i]);
+        }
+
+        return ans;
+    }
+};
+
+
+Next Greater Element - 2
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n, -1);
+        stack<int> st;
+
+        for (int i = 2 * n - 1; i >= 0; i--) {
+            int curr = arr[i % n];
+
+            while (!st.empty() && st.top() <= curr) {
+                st.pop();
+            }
+
+            if (i < n) {
+                ans[i] = st.empty() ? -1 : st.top();
+            }
+
+            st.push(curr);
+        }
+
+        return ans;
+    }
+};
+
+
+Next Smaller Element
+class Solution {
+public:
+    vector<int> nextSmallerElements(const vector<int>& arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && st.top() >= arr[i]) {
+                st.pop();
+            }
+
+            ans[i] = st.empty() ? -1 : st.top();
+
+            st.push(arr[i]);
+        }
+
+        return ans;
+    }
+};
+
+
+Number of Greater Elements to the Right
+class Solution {
+public:
+    class Fenwick {
+    public:
+        vector<int> bit;
+        int n;
+
+        Fenwick(int n) {
+            this->n = n;
+            bit.assign(n + 1, 0);
+        }
+
+        void update(int idx, int val) {
+            while (idx <= n) {
+                bit[idx] += val;
+                idx += idx & -idx;
+            }
+        }
+
+        int query(int idx) {
+            int sum = 0;
+            while (idx > 0) {
+                sum += bit[idx];
+                idx -= idx & -idx;
+            }
+            return sum;
+        }
+
+        int rangeQuery(int l, int r) {
+            return query(r) - query(l - 1);
+        }
+    };
+
+    vector<int> count_NGE(vector<int> &arr, vector<int> &indices) {
+        int n = arr.size();
+
+        vector<int> vals = arr;
+        sort(vals.begin(), vals.end());
+        vals.erase(unique(vals.begin(), vals.end()), vals.end());
+
+        int m = vals.size();
+        Fenwick ft(m);
+
+        vector<int> cnt(n);
+
+        for (int i = n - 1; i >= 0; i--) {
+            int rank = lower_bound(vals.begin(), vals.end(), arr[i]) - vals.begin() + 1;
+
+            cnt[i] = ft.rangeQuery(rank + 1, m);
+
+            ft.update(rank, 1);
+        }
+
+        vector<int> ans;
+        for (int idx : indices) {
+            ans.push_back(cnt[idx]);
+        }
+
+        return ans;
+    }
+};
+
+
+Trapping Rainwater
+class Solution
+{
+public:
+    int trap(vector<int> &height){
+        int n = height.size();
+        int left = 0, right = n - 1;
+        int leftMax = 0, rightMax = 0;
+        int water = 0;
+
+        while (left <= right) {
+            if (height[left] <= height[right]) {
+                if (height[left] >= leftMax)
+                    leftMax = height[left];
+                else
+                    water += leftMax - height[left];
+
+                left++;
+            } else {
+                if (height[right] >= rightMax)
+                    rightMax = height[right];
+                else
+                    water += rightMax - height[right];
+
+                right--;
+            }
+        }
+
+        return water;
+    }
+};
+
+
+Sum of Subarray Minimums
+class Solution {
+public:
+    int sumSubarrayMins(vector<int> &arr) {
+        int n = arr.size();
+        const int MOD = 1e9 + 7;
+
+        vector<int> left(n), right(n);
+        stack<int> st;
+
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && arr[st.top()] > arr[i]) {
+                st.pop();
+            }
+
+            left[i] = st.empty() ? i + 1 : i - st.top();
+            st.push(i);
+        }
+
+        while (!st.empty()) st.pop();
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && arr[st.top()] >= arr[i]) {
+                st.pop();
+            }
+
+            right[i] = st.empty() ? n - i : st.top() - i;
+            st.push(i);
+        }
+
+        long long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            long long contrib =
+                1LL * arr[i] * left[i] * right[i];
+            ans = (ans + contrib) % MOD;
+        }
+
+        return (int)ans;
+    }
+};
+
+
+Asteroid Collision
+class Solution{
+public:
+    vector<int> asteroidCollision(vector<int> &asteroids){
+        stack<int> st;
+
+        for(int asteroid : asteroids){
+            bool destroyed = false;
+
+            while(!st.empty() && st.top() > 0 && asteroid < 0){
+                if(st.top() < -asteroid){
+                    st.pop();
+                }
+                else if(st.top() == -asteroid){
+                    st.pop();
+                    destroyed = true;
+                    break;
+                }
+                else{
+                    destroyed = true;
+                    break;
+                }
+            }
+
+            if(!destroyed){
+                st.push(asteroid);
+            }
+        }
+
+        vector<int> ans(st.size());
+
+        for(int i = st.size() - 1; i >= 0; i--){
+            ans[i] = st.top();
+            st.pop();
+        }
+
+        return ans;
+    }
+};
+
+
+Sum of Subarray Ranges
+class Solution {
+public:
+    long long subArrayRanges(vector<int> &nums) {
+        int n = nums.size();
+
+        vector<int> prevLess(n), nextLess(n);
+        vector<int> prevGreater(n), nextGreater(n);
+
+        stack<int> st;
+
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && nums[st.top()] > nums[i]) {
+                st.pop();
+            }
+            prevLess[i] = st.empty() ? -1 : st.top();
+            st.push(i);
+        }
+
+        while (!st.empty()) st.pop();
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && nums[st.top()] >= nums[i]) {
+                st.pop();
+            }
+            nextLess[i] = st.empty() ? n : st.top();
+            st.push(i);
+        }
+
+        while (!st.empty()) st.pop();
+
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && nums[st.top()] < nums[i]) {
+                st.pop();
+            }
+            prevGreater[i] = st.empty() ? -1 : st.top();
+            st.push(i);
+        }
+
+        while (!st.empty()) st.pop();
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && nums[st.top()] <= nums[i]) {
+                st.pop();
+            }
+            nextGreater[i] = st.empty() ? n : st.top();
+            st.push(i);
+        }
+
+        long long minSum = 0, maxSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            long long left = i - prevLess[i];
+            long long right = nextLess[i] - i;
+            minSum += 1LL * nums[i] * left * right;
+        }
+
+        for (int i = 0; i < n; i++) {
+            long long left = i - prevGreater[i];
+            long long right = nextGreater[i] - i;
+            maxSum += 1LL * nums[i] * left * right;
+        }
+
+        return maxSum - minSum;
+    }
+};
+
+
+Remove K Digits
+class Solution {
+public:
+    string removeKdigits(string nums, int k) {
+        string st;
+
+        for (char digit : nums) {
+            while (!st.empty() && k > 0 && st.back() > digit) {
+                st.pop_back();
+                k--;
+            }
+            st.push_back(digit);
+        }
+
+        while (!st.empty() && k > 0) {
+            st.pop_back();
+            k--;
+        }
+
+        int i = 0;
+        while (i < st.size() && st[i] == '0') {
+            i++;
+        }
+
+        string ans = st.substr(i);
+
+        return ans.empty() ? "0" : ans;
+    }
+};
+
+
+Largest rectangle in a histogram
+class Solution
+{
+public:
+    int largestRectangleArea(vector<int> &heights) {
+        int n = heights.size();
+        stack<int> st;
+        int maxi = 0;
+
+        for (int i = 0; i <= n; i++) {
+            while (!st.empty() && (i == n || heights[st.top()] >= heights[i])) {
+                int height = heights[st.top()];
+                st.pop();
+
+                int right = i;
+                int left = st.empty() ? -1 : st.top();
+
+                int width = right - left - 1;
+                maxi = max(maxi, height * width);
+            }
+
+            st.push(i);
+        }
+
+        return maxi;
+    }
+};
+
+
+Maximum Rectangles
+class Solution
+{
+public:
+    int largestRectangleArea(vector<int> &heights) {
+        int n = heights.size();
+        stack<int> st;
+        int maxi = 0;
+
+        for (int i = 0; i <= n; i++) {
+            while (!st.empty() && (i == n || heights[st.top()] >= heights[i])) {
+                int h = heights[st.top()];
+                st.pop();
+
+                int right = i;
+                int left = st.empty() ? -1 : st.top();
+
+                maxi = max(maxi, h * (right - left - 1));
+            }
+            st.push(i);
+        }
+
+        return maxi;
+    }
+
+    int maximalAreaOfSubMatrixOfAll1(vector<vector<int>> &matrix){
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        vector<int> heights(n, 0);
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 1)
+                    heights[j]++;
+                else
+                    heights[j] = 0;
+            }
+
+            ans = max(ans, largestRectangleArea(heights));
+        }
+
+        return ans;
+    }
+};
+
+
+Sliding Window Maximum
+class Solution{
+public:
+    vector<int> maxSlidingWindow(vector<int> &arr, int k) {
+        int n = arr.size();
+        deque<int> dq;
+        vector<int> ans;
+
+        for (int i = 0; i < n; i++) {
+            while (!dq.empty() && dq.front() <= i - k) {
+                dq.pop_front();
+            }
+
+            while (!dq.empty() && arr[dq.back()] <= arr[i]) {
+                dq.pop_back();
+            }
+
+            dq.push_back(i);
+
+            if (i >= k - 1) {
+                ans.push_back(arr[dq.front()]);
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+Stock span problem
+class Solution
+{
+public:
+    vector<int> stockSpan(vector<int> arr, int n) {
+        vector<int> span(n);
+        stack<int> st;
+
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && arr[st.top()] <= arr[i]) {
+                st.pop();
+            }
+
+            if (st.empty()) {
+                span[i] = i + 1;
+            } else {
+                span[i] = i - st.top();
+            }
+
+            st.push(i);
+        }
+
+        return span;
+    }
+};
+
+
+Celebrity Problem
+class Solution
+{
+public:
+    int celebrity(vector<vector<int>> &M) {
+        int n = M.size();
+
+        int a = 0, b = n - 1;
+
+        while (a < b) {
+            if (M[a][b] == 1) {
+                a++;
+            } else {
+                b--;
+            }
+        }
+
+        int candidate = a;
+
+        for (int i = 0; i < n; i++) {
+            if (i == candidate) continue;
+
+            if (M[candidate][i] == 1 || M[i][candidate] == 0) {
+                return -1;
+            }
+        }
+
+        return candidate;
+    }
+};
+
+
+LRU Cache
+class LRUCache {
+    int cap;
+    list<pair<int, int>> dll;
+    unordered_map<int, list<pair<int, int>>::iterator> mp;
+
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+
+    int get(int key_) {
+        if (mp.find(key_) == mp.end()) {
+            return -1;
+        }
+
+        auto it = mp[key_];
+        int value = it->second;
+
+        dll.erase(it);
+        dll.push_front({key_, value});
+        mp[key_] = dll.begin();
+
+        return value;
+    }
+
+    void put(int key_, int value) {
+        if (mp.find(key_) != mp.end()) {
+            dll.erase(mp[key_]);
+        }
+        else if (dll.size() == cap) {
+            int keyToRemove = dll.back().first;
+            dll.pop_back();
+            mp.erase(keyToRemove);
+        }
+
+        dll.push_front({key_, value});
+        mp[key_] = dll.begin();
+    }
+};
+
+
+LFU Cache
+class LFUCache {
+    int cap, minFreq;
+
+    unordered_map<int, pair<int, int>> keyInfo;
+    unordered_map<int, list<int>> freqList;
+    unordered_map<int, list<int>::iterator> pos;
+
+    void updateFreq(int key) {
+        int freq = keyInfo[key].second;
+
+        freqList[freq].erase(pos[key]);
+
+        if (freqList[freq].empty()) {
+            freqList.erase(freq);
+            if (minFreq == freq) {
+                minFreq++;
+            }
+        }
+
+        keyInfo[key].second++;
+
+        freqList[freq + 1].push_front(key);
+        pos[key] = freqList[freq + 1].begin();
+    }
+
+public:
+    LFUCache(int capacity) {
+        cap = capacity;
+        minFreq = 0;
+    }
+
+    int get(int key) {
+        if (keyInfo.find(key) == keyInfo.end()) {
+            return -1;
+        }
+
+        int value = keyInfo[key].first;
+        updateFreq(key);
+
+        return value;
+    }
+
+    void put(int key, int value) {
+        if (cap == 0) return;
+
+        if (keyInfo.find(key) != keyInfo.end()) {
+            keyInfo[key].first = value;
+            updateFreq(key);
+            return;
+        }
+
+        if (keyInfo.size() == cap) {
+            int evictKey = freqList[minFreq].back();
+
+            freqList[minFreq].pop_back();
+            if (freqList[minFreq].empty()) {
+                freqList.erase(minFreq);
+            }
+
+            keyInfo.erase(evictKey);
+            pos.erase(evictKey);
+        }
+
+        keyInfo[key] = {value, 1};
+        freqList[1].push_front(key);
+        pos[key] = freqList[1].begin();
+        minFreq = 1;
+    }
+};
